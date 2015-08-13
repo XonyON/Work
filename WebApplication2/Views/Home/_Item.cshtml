@@ -1,0 +1,195 @@
+﻿@model IEnumerable<WebApplication2.Models.ToDoItem>
+
+@*<script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+<script>
+    function DeleteItem(id) {
+        $("li[id=item_" + id).remove();
+    }
+
+    function AjaxFinish(id) {
+        $('#com_'+id).off('click');
+        $('#com_' + id).one('click',function () {
+            var itemid = parseInt($(this).attr('id').substr(4));
+            var finished = $(this).hasClass('finish') ? true : false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Complete", "Home")',
+            data: { id: itemid, check: finished },
+            success: function (data) {
+                var elem;
+                if (data.complete) {
+                    $('#com_' + data.id).removeClass('unfinish');
+                    $('#com_' + data.id).addClass('finish');
+                    elem = $('#item_' + data.id);
+                    DeleteItem(data.id);
+                    if ($('#endtasks').val() == 'true')
+                        {
+                            $('#finisheditem').prepend(elem);
+                        }
+
+                        $('#comdet_' + data.id).removeClass('unfinish');
+                        $('#comdet_' + data.id).addClass('finish');
+                        $('#task_text_' + data.id).css('text-decoration', 'line-through');
+                        $('#inerlist_' + data.id + ' .inertask').removeClass('unfinish');
+                        $('#inerlist_' + data.id + ' .inertask').addClass('finish');
+                        $('#inerlist_' + data.id + ' .iner-label').css('text-decoration', 'line-through');
+                    }
+                    else {
+                        $('#com_' + data.id).removeClass('finish');
+                        $('#com_' + data.id).addClass('unfinish');
+                        elem = $('#item_' + data.id);
+                        DeleteItem(data.id);
+                        $('#unfinisheditem').append(elem);
+
+                        $('#comdet_' + data.id).removeClass('finish');
+                        $('#comdet_' + data.id).addClass('unfinish');
+                        $('#task_text_' + data.id).css('text-decoration', '');
+
+                    }
+                    AjaxFinish(data.id);
+                    AjaxMark(data.id);
+                    AjaxDetails(data.id);
+                }
+            })
+        })
+    }
+
+    function AjaxMark(id) {
+        $('#mrk_' + id).off('click');
+        $('#mrk_'+id).click(function () {
+            var itemid = parseInt($(this).attr('id').substr(4));
+            var marked = $(this).hasClass('mark') ? true : false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Mark", "Home")',
+                data: { id: itemid, check: marked },
+                success: function (data) {
+                    $('#mrk_' + itemid).removeClass();
+                    $('#mrk_' + itemid).addClass('favorite');
+                    if (data.marked) $('#mrk_' + itemid).addClass('mark');
+                    else $('#mrk_' + itemid).addClass('unmark');
+                }
+            })
+        })
+    }
+
+    function AjaxDetails(id) {
+        var timer;
+
+        $('#item_'+id).off('click');
+        $('#item_' + id).click(function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(250);
+            parseInt($(this).attr('id').substr(5));
+            $('.ToDoItem').css('background-color', 'white');
+            $(this).css('background-color', 'skyblue');
+            if ($('#detail').css('margin-right') == '0px')
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Details", "Home")',
+                data: { itemId: id },
+                success: function (data) {
+                    $('#detail').html(data);
+                }
+            })
+        })
+        $('#item_' + id).off("dblclick");
+
+        $('#item_' + id).dblclick(function () {
+            clearTimeout(timer);
+            var id = parseInt($(this).attr('id').substr(5));
+            $('.ToDoItem').css('background-color', 'white');
+            $(this).css('background-color', 'skyblue');
+            $('#itemList').css('width', '');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Details", "Home")',
+                data: {itemId: id},
+                success: function (data) {
+                    if (parseInt($('#itemList').css('max-width')) < 90 && ($('#container').width() - $('#itemList').width()) < $('#detail').width()) {
+                        $('#itemList').css('width', '37%');
+                    }
+                    else $('#itemList').css('width', '50%');
+                   
+
+                    $('#detail').css('margin-right', '0');
+                    $('#detail').html(data);
+                }
+            })
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.ToDoItem').each(function () {
+            var itemid = parseInt($(this).attr('id').substr(5));
+            AjaxFinish(itemid);
+            AjaxMark(itemid);
+            AjaxDetails(itemid);
+        });
+    })
+</script>
+
+<script>
+    jQuery(function($){
+        $(document).click(function(event) {
+            if ($(event.target).closest("#detail").length) return;
+            if ($(event.target).closest(".ToDoItem").length) return;
+            if ($(event.target).closest(".endTaskButton").length) return;
+            $('#itemList').css('width','');
+            $('#detail').css('margin-right', '-' + $('#detail').width()+'px');
+            $('#detail').html('');
+            event.stopPropagation();
+        });
+        $(window).on('resize', function () {
+            $('#itemList').css('width', '');
+            //$('#detail').css('margin-right', '-' + $('#detail').width() + 'px');
+            $('#detail').css('margin-right', '');
+            $('#detail').html('');
+        })
+    })
+</script>
+
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <li id="item_@item.Id" class="ToDoItem list-unstyled">
+            <span style="float:left;">
+                @if (item.isComplete)
+                {
+                    <input id="com_@item.Id" type="button" class="complete finish" />
+                }
+                else
+                {
+                    <input id="com_@item.Id" type="button" class="complete unfinish" />
+                }
+            </span>
+            <span class="item_text" unselectable="on">
+                @item.Task
+            </span>
+            <span style="float:right;">
+                @if (item.Mark)
+                {
+                    <input id="mrk_@item.Id" type="button" class="favorite mark" />
+                }
+                else
+                {
+                    <input id="mrk_@item.Id" type="button" class="favorite unmark" />
+                }
+            </span>
+            <span class="time">
+                @if (item.FinishTime != null)
+                {
+                    <label id="time_@item.Id">@item.FinishTime.Value.Date.ToString("d")</label>
+                }
+            </span>
+        </li>
+    }
+}
+
+     

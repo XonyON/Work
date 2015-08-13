@@ -1,0 +1,455 @@
+﻿@model WebApplication2.Models.ToDoItem
+
+@*<script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+<script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.datetimepicker.js"></script>
+<script src="~/Scripts/MiniUpload/jquery.ui.widget.js"></script>
+<script src="~/Scripts/MiniUpload/jquery.fileupload.js"></script>
+<script src="~/Scripts/MiniUpload/jquery.iframe-transport.js"></script>
+<script src="~/Scripts/MiniUpload/jquery.knob.js"></script>
+<script src="~/Scripts/MiniUpload/script.js"></script>
+<link href="~/Content/MiniUpload/style.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $('#finishDatetimepicker').datetimepicker({
+            lang: 'ru',
+            timepicker: false,
+            format: 'd.m.Y',
+            closeOnWithoutClick :true
+        });
+
+        $('#ringDatetimepicker').datetimepicker({
+            lang: 'ru',
+            closeOnWithoutClick :true,
+            format:'d.m.Y H:i'
+        });
+        $('#datetimepicker').datetimepicker({
+            lang: 'ru',
+            i18n: {
+                de: {
+                    months: [
+                     'Januar', 'Februar', 'März', 'April',
+                     'Mai', 'Juni', 'Juli', 'August',
+                     'September', 'Oktober', 'November', 'Dezember',
+                    ],
+                    dayOfWeek: [
+                     "So.", "Mo", "Di", "Mi",
+                     "Do", "Fr", "Sa.",
+                    ]
+                }
+            },
+            closeOnWithoutClick :true,
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+
+        PickerClickBtn("btnFinishDatePicker","btnRemFinishDate","finishDatetimepicker");
+        PickerRemoveBtn("finishDatetimepicker", "btnRemFinishDate");
+        PickerClickBtn("btnRingDatePicker","btnRemRingDate","ringDatetimepicker");
+        PickerRemoveBtn("ringDatetimepicker","btnRemRingDate");
+
+    })
+
+    function PickerClickBtn(btnid, btnremid, pickerid) {
+        $('#' + btnid).click(function () {
+            $('#' + pickerid).datetimepicker('show');
+            $('#' + btnremid).css('visibility', 'visible');
+       //     $('#' + pickerid).css('visibility', 'visible');
+        })
+    }
+
+    function PickerRemoveBtn(pickerid, btnid) {
+        $('#' + btnid).click(function () {
+            var id = @Model.Id;
+            var times = null;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FinishTime")',
+                data: {itemid: id, time: times },
+                success:function(){
+                    $('#time_'+id).html('');
+                }
+            })
+            $('#' + pickerid).val('');
+            $('#' + btnid).css('visibility', 'hidden');
+        //    $('#' + pickerid).css('visibility', 'hidden');
+        })
+    }
+
+    function DeleteCommentBtn(id)
+    {
+        $("#commentdelete_"+id).click(function () {
+            if (confirm('Удалить комментарий?')) {
+                var id = parseInt($(this).attr('id').substr(14));
+                var url = 'http://localhost:55753/api/Comments/' + id;
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    success: function (data) {
+                        $('#comment_' + data).remove();
+                    },
+                    error:function (jqXHR, textStatus, err) {
+                        console.log('Error: ' + err);
+                    }
+                })
+            }
+
+        })
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#addtask').keypress(function(e) {
+            if(e.which == 13) {
+                var text = $(this).val();
+                $.ajax ({
+                    type:'POST',
+                    url: '@Url.Action("AddInerTask", "Home", new {itemid = @Model.Id })',
+                    data: { tasktext:text },
+                    success: function(data){
+                        $('#addtask').val('');
+                        $('#addtasks').html(data);
+                    }
+                })
+            }
+        });
+        @*$('#comment').keypress(function(e) {
+            if(e.which == 13 && $(this).val() != '') {
+                var text = $(this).val();
+                $.ajax ({
+                    type:'POST',
+                    url: '@Url.Action("AddComment", "Home", new { itemid = @Model.Id })',
+                    data: { text:text },
+                    success: function(data){
+                        $('#comment').val('');
+                        $('#comments').html(data);
+                    }
+                })
+            }
+        });*@
+
+        $('#comment').keypress(function(e) {
+            if(e.which == 13 && $(this).val() != '') {
+                var text = $(this).val();
+                var url = 'http://localhost:55753/api/Comments/';
+                $.ajax ({
+                    type:'POST',
+                    url: url,
+                    data: {username:'@User.Identity.Name', text: text, itemid:@Model.Id },
+                    success: function(data){
+                        $('#comment').val('');
+                        var date = data.time.substr(8,2)+'.'+ data.time.substr(5,2)+'.'+ data.time.substr(0,4)+' '+ data.time.substr(11,2)+':'+ data.time.substr(14,2)+':'+ data.time.substr(17,2);
+                        $('#comments').append(' \
+                             <div id="comment_'+data.Id+'" class="comment-block" style="display:inline-block;"> \
+                                  <div class="comment-text">\
+                                     <label>'+data.username+' :</label>\
+                                     <text>'+data.text+'</text>\
+                                  </div>\
+                               <div class="comment-time">'+date+'</div>\
+                               <div class="comment-delete">\
+                                   <a class="deletecomment" id="commentdelete_'+data.Id+'"><img class="delete-icon" src="http://localhost:55753/Content/Icons/icon_delete.png" /></a>\
+                                </div>\
+                             </div>\
+                        ');
+                        DeleteCommentBtn(data.Id);
+
+                    }
+                })
+            }
+        });
+
+        $('#close').click(function(){
+            //$('#detail').css('margin-right','-1%');
+            $('#detail').css('margin-right','');
+            $('#detail').html('');
+        })
+        $('#delete_item').one('click',function(){
+            if (confirm('Вы точно хотите удалить задачу?'))
+            {
+                var id = @Model.Id;
+                $.ajax({
+                    type:'DELETE',
+                    url:'@Url.Action("Delete", "Home")/'+id,
+                    success:function(){
+                        //$('#detail').css('margin-right','-25%');
+                        //$('#itemList').css('width','80%');
+                        $('#detail').css('margin-right','-' + $('#detail').width() + 'px');
+                        $('#itemList').css('width','');
+                        $('#item_'+id).remove();
+                        $('#detail').html('');
+
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+
+<script>
+    $(document).ready(function (){
+        $('#note').each(function(){
+            this.style.height = (this.scrollHeight)+'px';
+        })
+        $('#note').change(function(){
+            var text = $('#note').val();
+            var id = @Model.Id;
+            $.ajax({
+                type:'POST',
+                url: '@Url.Action("NoteEdit","Home")',
+                data: { itemid: id, notext: text }
+            })
+        })
+        
+    })
+</script>
+
+<script type="text/javascript">
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25+o.scrollHeight)+"px";
+    }
+</script>
+
+<script>
+    function ChangeTime(data)
+    {
+        var times = $(data).val();
+        var id = @Model.Id;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("FinishTime")',
+            data: {itemid: id, time: times },
+            success:function(){
+                $('#time_'+id).html(times);
+            }
+        })
+    }
+
+    function RingTime(data)
+    {
+        var times = $(data).val();
+        var id = @Model.Id;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RingTime")',
+            data: {itemid: id, time: times },
+            success:function(){
+
+            }
+        })
+    }
+</script>
+
+<script>
+        $('#top .complete').click(function(){
+            var id = $(this).attr('id').substr(7);
+            if($('#endtasks').val() == 'true')
+            {
+                $('#com_'+id).click();
+            }
+            else{
+                var finished = $(this).hasClass('finish') ? true : false;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Complete", "Home")',
+                    data: { id: id, check: finished },
+                    success:function(data){
+                        if (data.complete)
+                        {
+                            DeleteItem(data.id);
+                        }
+                        else
+                        {
+                            $.ajax({
+                                type:'POST',
+                                url:'@Url.Action("ActiveItemList")',
+                                success:function(data){
+                                    $('#unfinisheditem').html(data);
+                                }
+                            })
+                        }
+                    }
+
+                })
+            }
+ 
+            if($(this).hasClass('finish'))
+            {
+                $(this).removeClass('finish');
+                $(this).addClass('unfinish');
+                $('#task_text_'+id).css('text-decoration','');
+            } 
+            else{
+                $(this).removeClass('unfinish');
+                $(this).addClass('finish');
+                $('#task_text_'+id).css('text-decoration','line-through');
+
+                $('#inerlist_' + id + ' .inertask').removeClass('unfinish');
+                $('#inerlist_' + id + ' .inertask').addClass('finish');
+                $('#inerlist_' + id + ' .iner-label').css('text-decoration', 'line-through');
+            }
+        })
+        
+
+        $('#top .favorite').click(function(){
+            var id = $(this).attr('id').substr(7);
+            if($('#endtasks').val() == 'true')
+            {
+                $('#mrk_'+id).click();
+            }
+            else{
+                var marked = $(this).hasClass('mark') ? true : false;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Mark", "Home")',
+                    data: { id: id, check: marked }
+                })
+               
+            }
+
+            if($(this).hasClass('mark'))
+            {
+                $(this).removeClass('mark');
+                $(this).addClass('unmark');
+            } else
+            {
+                $(this).removeClass('unmark');
+                $(this).addClass('mark');
+            }
+
+        })
+</script>
+
+    @if (Model != null)
+    {
+        <div id="top">
+            <span style="float:left;">
+                @if (Model.isComplete)
+                {
+                    <input id="comdet_@Model.Id" type="button" class="complete finish" />
+                }
+                else
+                {
+                    <input id="comdet_@Model.Id" type="button" class="complete unfinish" />
+                }
+            </span>
+
+            @if (Model.isComplete)
+            {
+                <span id="task_text_@Model.Id" class="task_text" style="text-decoration: line-through;">
+                    @Model.Task
+                </span>
+            }
+            else
+            {
+                <span id="task_text_@Model.Id" class="task_text">
+                    @Model.Task
+                </span>
+            }
+
+            <span style="float:right;">
+                @if (Model.Mark)
+                {
+                    <input id="mrkdet_@Model.Id" type="button" class="favorite mark" />
+                }
+                else
+                {
+                    <input id="mrkdet_@Model.Id" type="button" class="favorite unmark" />
+                }
+            </span>
+        </div>
+
+    <div id="middle">
+        <div>
+            @if (@Model.FinishTime != null)
+            {
+                <div class="innerdiv">
+                    <img class="icontime" src="~/Content/Images/calendar-icon.png" style="background-size:24px 24px;" />
+                    <input id="btnFinishDatePicker" class="btnTimePicker" type="button" />
+                    <input id="btnRemFinishDate" class="btnRemoveTime" type="button" style="visibility:visible;" />
+                    <input id="finishDatetimepicker" value="@Model.FinishTime.Value.Date.ToString("dd.MM.yyyy")" class="time-picker" type="text" placeholder="Конечное время" name="date" style="visibility:visible" onchange="ChangeTime(this)">
+                </div>
+            }
+            else
+            {
+                <div class="innerdiv">
+                    <img class="icontime" src="~/Content/Images/calendar-icon.png" style="background-size:24px 24px;" />
+                    <input id="btnFinishDatePicker" class="btnTimePicker" type="button" />
+                    <input id="btnRemFinishDate" class="btnRemoveTime" type="button" />
+                    <input id="finishDatetimepicker" class="time-picker" type="text" name="date" placeholder="Конечное время" style="visibility:visible;" onchange="ChangeTime(this)">
+                </div>
+            }
+
+            @if (@Model.RememberTime != null)
+            {
+                <div class="innerdiv alarm">
+                    <img class="icontime" src="~/Content/Images/alert-clock-icon_1.png" />
+                    <input id="btnRingDatePicker" class="btnTimePicker" type="button" />
+                    <input id="btnRemRingDate" class="btnRemoveTime" type="button" style="visibility:visible;" />
+                    <input id="ringDatetimepicker" value="@Model.RememberTime.Value.ToString("dd.MM.yyyy HH:mm")" class="time-picker" type="text" placeholder="Напоминание" name="date" style="visibility:visible;" onchange="RingTime(this)">
+                </div>
+            }
+            else
+            {
+                <div class="innerdiv">
+                    <img class="icontime alarm" src="~/Content/Images/alert-clock-icon_1.png" />
+                    <input id="btnRingDatePicker" class="btnTimePicker" type="button" />
+                    <input id="btnRemRingDate" class="btnRemoveTime" type="button" />
+                    <input id="ringDatetimepicker" class="time-picker" type="text" name="date" style="visibility:visible;" placeholder="Напоминание" onchange="RingTime(this)">
+                </div>
+            }
+        </div>
+        <div class="innerdiv">
+            <input id="addtask" type="text" name="addtask" maxlength="100" placeholder="Добавить подзадачу..." />
+            <div id="addtasks">
+                @Html.Action("ShowInerTask", new { taskid = Model.Id })
+            </div>
+        </div>
+
+         @if (Model.Note != null)
+         {  <textarea id="note" name="note" onkeyup="textAreaAdjust(this)">@Model.Note</textarea> }
+         else
+         {  <textarea id="note" name="note" onkeyup="textAreaAdjust(this)"></textarea>  }
+
+        <form id="upload" method="post" action="@Url.Action("UploadFile", "Home", new {id = Model.Id })" enctype="multipart/form-data">
+            <div id="drop">
+                Добавить файл
+                <a>Обзор</a>
+                <input type="file" name="upl" multiple />
+            </div>
+
+            <ul>
+
+            </ul>
+        </form>
+
+        <div id="files" class="innerdiv" style="background:none; padding:0px 0px 0px 0px; border:none;">
+            @Html.Action("Files", "Home", new {id = Model.Id })
+        </div>
+
+        <div id="comments" class="comments-container">
+          @Html.Action("Comments", "Home", new { id = Model.Id})
+        </div>
+    </div>
+
+    <div id="bottom">
+        <div class="comments-input">
+            <input id="comment" name="comment" type="text" placeholder="Добавить комментарий" />
+        </div>
+        
+        <div class="bottom">
+            <a id="close"><img src="~/Content/Icons/arrow-right-32x32.png" width="28" height="28" /></a> 
+            <label>Создана: <span style="color:blue;">@Model.CreatingTime.ToString("d")</span> в <span style="color:blueviolet;">@Model.CreatingTime.Hour:@Model.CreatingTime.Minute</span></label>
+            <a id="delete_item"><img src="~/Content/Icons/trash-icon-32x32.png" width="28" height="28" /></a>
+        </div>
+    </div>
+}
+    else
+    {
+        Html.RenderPartial("_NotFound");
+    }

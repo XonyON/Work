@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WebApplication2.Models.AddTask>
+
+<script>
+    jQuery(function($){
+        $(document).ready(function () {
+            $('.inertask').click(function () {
+                var id = $(this).attr('id').substr(16);
+                var complete = $(this).hasClass('finish') ? true : false;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CompleteInerTask")',
+                    data: {taskid: id, completed: complete },
+                    success: function () {
+                        if (complete)
+                        {
+                            $('#btnCompleteIner_' + id).removeClass('finish');
+                            $('#btnCompleteIner_' + id).addClass('unfinish');
+                            $('#inertext_' + id).css('text-decoration', '');
+                        }
+                        else
+                        {
+                            $('#btnCompleteIner_' + id).removeClass('unfinish');
+                            $('#btnCompleteIner_' + id).addClass('finish');
+                            $('#inertext_' + id).css('text-decoration', 'line-through');
+                        }
+                       
+                    }
+                })
+            })
+
+            $('.iner-delete').click(function () {
+                var id = $(this).attr('id').substr(14);
+                $.ajax({
+                    type: 'POST',
+                    data: {id: id},
+                    url: '@Url.Action("DeleteInerTask")',
+                    success: function () {
+                        $('#task_' + id).hide('slow', function () { $('#task_' + id).remove(); });
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+@if (Model != null)
+{
+    <ul class="list-unstyled inertasks" id="inerlist_@Model.First().itemID">
+        @foreach (var item in Model)
+        {
+            <li id="task_@item.Id" class="li-task">
+                @if (item.isComplete != null && (bool)item.isComplete)
+                {
+                    <button class="inertask finish" id="btnCompleteIner_@item.Id"></button>
+                    <span class="splitter" style="float:left;"></span>
+                    <label class="iner-label" id="inertext_@item.Id" style="text-decoration:line-through;">@item.text</label>
+                    <button class="iner-delete" id="btnDeleteIner_@item.Id"></button>
+                    <span class="splitter" style="float:right;"></span>
+                }
+                else
+                {
+                    <button class="inertask unfinish" id="btnCompleteIner_@item.Id"></button>
+                    <span class="splitter" style="float:left;"></span>
+                    <label class="iner-label" id="inertext_@item.Id">@item.text</label>
+                    <button class="iner-delete" id="btnDeleteIner_@item.Id"></button>
+                    <span class="splitter" style="float:right;"></span>
+                }
+            </li>
+        }
+    </ul>
+}

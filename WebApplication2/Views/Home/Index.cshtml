@@ -1,0 +1,33 @@
+﻿@model WebApplication2.Models.User
+
+@{
+    Layout="~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "DaySet";
+}
+
+<div style="max-width: 300px;">
+    @if (Request.IsAuthenticated)
+    {
+        <div id="login">
+            <div id="username">@Html.Encode(User.Identity.Name)</div>
+            <div id="avatar">
+                @*@if (Model != null)
+                {
+                    <img src="@Url.Action("GetFile", "User", new {id = Model.Id })" />
+                }
+                else
+                {
+                    <img src="~/Content/Images/user-avatar-64x64.png" width="32" height="32">
+                }*@
+                <img src="~/Content/Images/user-avatar-64x64.png" width="32" height="32">
+            </div>
+            <div id="logout">@Html.ActionLink("Sign Out", "Logout", "User")</div>
+        </div>
+    }
+    else
+    {
+        @Html.ActionLink("Register", "Register", "User")
+        <span> | </span>
+        @Html.ActionLink("Sign In", "Login", "User")
+    }
+</div>

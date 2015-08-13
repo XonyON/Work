@@ -1,0 +1,79 @@
+﻿@model IEnumerable<WebApplication2.Models.File>
+
+<style>
+    .file-image img {
+        border-top-left-radius:10px;
+        border-top-right-radius:10px;
+        border-bottom:2px outset black;
+
+    }
+    .file-image img:hover {
+        opacity:0.7;
+    }
+
+    .file-delete:hover{
+        cursor:pointer;
+    }
+
+    .delete-icon{
+        background-size:16px 16px;
+    }
+
+    .extfile {
+        display:inline; 
+        margin: 2px 5px 2px 5px
+    }
+    .addtime{
+        position:relative; 
+        bottom:0px; left:6px; 
+        font:12px black;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.deletelink').click(function () {
+            if (confirm('Удалить файл?')) {
+                var itemid = parseInt($(this).attr('id').substr(11));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("DeleteFile")',
+                    data: { id: itemid },
+                    success: function () {
+                        $('#fileitem_' + itemid).hide('slow', function () { $('#fileitem_' + itemid).remove(); });
+                    }
+
+                })
+            }
+        })
+    })
+</script>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <div class="item-file" id="fileitem_@item.Id">
+            @if (item.type.Contains("image"))
+            {
+                <div class="file-image">
+                    <a target="_blank" href="@Url.Action("GetFile", "Home", new { id = item.Id })"><img style="width:100%; height:100%;" src="@Url.Action("GetFile", "Home", new {id = item.Id })" /></a> 
+                </div>
+                    <span class="addtime">@item.time</span>
+            }
+            else
+            {
+                <a target="_blank" href="@Url.Action("GetFile", "Home", new { id = item.Id })">
+                    <img class="extfile"/>
+                    <div style="padding:2px 5px 2px 10px;">@item.name</div>
+                </a>
+                <div class="addtime" style="display:inline;">@item.time</div>
+            }
+            <div class="file-delete">
+                <a class="deletelink" id="filedelete_@item.Id"><img class="delete-icon" src="~/Content/Icons/icon_delete.png"/></a>
+            </div>
+
+        </div>
+
+    }
+}

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AddTask">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isComplete" Type="Boolean" />
+    <Property Name="itemID" Type="Int32" />
+    <NavigationProperty Name="ToDoItem" Relationship="DatabaseModel.ToDoItemAddTask" FromRole="AddTask" ToRole="ToDoItem" />
+    <Property Name="ToDoItemId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ToDoItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Task" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isComplete" Type="Boolean" />
+    <Property Name="Mark" Type="Boolean" />
+    <Property Name="FinishTime" Type="DateTime" Precision="3" />
+    <Property Name="RememberTime" Type="DateTime" Precision="3" />
+    <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="File" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="userID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AddTasks" Relationship="DatabaseModel.ToDoItemAddTask" FromRole="ToDoItem" ToRole="AddTask" />
+    <NavigationProperty Name="User" Relationship="DatabaseModel.UserToDoItem" FromRole="ToDoItem" ToRole="User" />
+    <Property Name="UserId1" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="regdata" Type="DateTime" Precision="3" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ToDoItems" Relationship="DatabaseModel.UserToDoItem" FromRole="User" ToRole="ToDoItem" />
+  </EntityType>
+  <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AddTasks" EntityType="Self.AddTask" />
+    <EntitySet Name="ToDoItems" EntityType="Self.ToDoItem" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="ToDoItemAddTask" Association="DatabaseModel.ToDoItemAddTask">
+      <End Role="ToDoItem" EntitySet="ToDoItems" />
+      <End Role="AddTask" EntitySet="AddTasks" />
+    </AssociationSet>
+    <AssociationSet Name="UserToDoItem" Association="DatabaseModel.UserToDoItem">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ToDoItem" EntitySet="ToDoItems" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="ToDoItemAddTask">
+    <End Type="DatabaseModel.ToDoItem" Role="ToDoItem" Multiplicity="1" />
+    <End Type="DatabaseModel.AddTask" Role="AddTask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ToDoItem">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AddTask">
+        <PropertyRef Name="ToDoItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserToDoItem">
+    <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+    <End Type="DatabaseModel.ToDoItem" Role="ToDoItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ToDoItem">
+        <PropertyRef Name="UserId1" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

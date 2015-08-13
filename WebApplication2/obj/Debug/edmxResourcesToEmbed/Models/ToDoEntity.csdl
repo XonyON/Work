@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AddTask">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="isComplete" Type="Boolean" />
+    <Property Name="itemID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ToDoItem" Relationship="DatabaseModel.ToDoItemAddTask" FromRole="AddTask" ToRole="ToDoItem" />
+  </EntityType>
+  <EntityType Name="ToDoItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Task" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="isComplete" Type="Boolean" Nullable="false" />
+    <Property Name="Mark" Type="Boolean" Nullable="false" />
+    <Property Name="FinishTime" Type="DateTime" Precision="3" />
+    <Property Name="RememberTime" Type="DateTime" Precision="3" />
+    <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="userID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DatabaseModel.UserToDoItem" FromRole="ToDoItem" ToRole="User" />
+    <NavigationProperty Name="AddTask" Relationship="DatabaseModel.ToDoItemAddTask" FromRole="ToDoItem" ToRole="AddTask" />
+    <Property Name="CreatingTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="regdata" Type="DateTime" Precision="3" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="remberMe" Type="Boolean" />
+    <NavigationProperty Name="ToDoItems" Relationship="DatabaseModel.UserToDoItem" FromRole="User" ToRole="ToDoItem" />
+  </EntityType>
+  <EntityContainer Name="DatabaseEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AddTasks" EntityType="DatabaseModel.AddTask" />
+    <EntitySet Name="ToDoItems" EntityType="Self.ToDoItem" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="UserToDoItem" Association="DatabaseModel.UserToDoItem">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ToDoItem" EntitySet="ToDoItems" />
+    </AssociationSet>
+    <AssociationSet Name="ToDoItemAddTask" Association="DatabaseModel.ToDoItemAddTask">
+      <End Role="ToDoItem" EntitySet="ToDoItems" />
+      <End Role="AddTask" EntitySet="AddTasks" />
+    </AssociationSet>
+    <EntitySet Name="Files" EntityType="DatabaseModel.File" />
+    <EntitySet Name="Comments" EntityType="DatabaseModel.Comment" />
+  </EntityContainer>
+  <Association Name="UserToDoItem">
+    <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+    <End Type="DatabaseModel.ToDoItem" Role="ToDoItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ToDoItem">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ToDoItemAddTask">
+    <End Type="DatabaseModel.ToDoItem" Role="ToDoItem" Multiplicity="1" />
+    <End Type="DatabaseModel.AddTask" Role="AddTask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ToDoItem">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AddTask">
+        <PropertyRef Name="itemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="File">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="file1" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="itemid" Type="Int32" Nullable="false" />
+    <Property Name="type" Type="String" Unicode="true" FixedLength="false" MaxLength="Max" />
+    <Property Name="name" Type="String" Unicode="true" FixedLength="false" MaxLength="Max" />
+  </EntityType>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="itemid" Type="Int32" Nullable="false" />
+  </EntityType>
+</Schema>

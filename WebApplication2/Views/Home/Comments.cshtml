@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApplication2.Models.Comment>
+
+<script>
+    @*$(document).ready(function () {
+        $(".deletecomment").click(function () {
+            if (confirm('Удалить комментарий?'))
+            {
+                var id = parseInt($(this).attr('id').substr(14));
+                $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteComment","Home")/'+id,
+                    success: function () {
+                        $('#comment_' + id).remove();
+                    }
+                })
+            }
+               
+        })
+    })*@
+
+    $(document).ready(function () {
+        $(".deletecomment").click(function () {
+            if (confirm('Удалить комментарий?')) {
+                var id = parseInt($(this).attr('id').substr(14));
+                var url = 'http://localhost:55753/api/Comments/' + id;
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    success: function (data) {
+                        $('#comment_' + data).remove();
+                    },
+                    error:function (jqXHR, textStatus, err) {
+                        console.log('Error: ' + err);
+                    }
+                })
+            }
+
+        })
+    })
+</script>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <div id="comment_@item.Id" class="comment-block" style="display:inline-block;">
+            <div class="comment-text">
+                <label>@item.username :</label>
+                <text>@item.text</text>
+            </div>
+                <div class="comment-time">
+                    @item.time
+                </div>
+                <div class="comment-delete">
+                    <a class="deletecomment" id="commentdelete_@item.Id"><img class="delete-icon" src="~/Content/Icons/icon_delete.png" /></a>
+                </div>
+        </div>
+    }
+}

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="DatabaseEntities2">
+    <EntitySetMapping Name="AddTasks">
+      <EntityTypeMapping TypeName="DatabaseModel.AddTask">
+        <MappingFragment StoreEntitySet="AddTask">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="isComplete" ColumnName="isComplete" />
+          <ScalarProperty Name="itemID" ColumnName="itemID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ToDoItems">
+      <EntityTypeMapping TypeName="DatabaseModel.ToDoItem">
+        <MappingFragment StoreEntitySet="ToDoItem">
+          <ScalarProperty Name="CreatingTime" ColumnName="CreatingTime" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Task" ColumnName="Task" />
+          <ScalarProperty Name="isComplete" ColumnName="isComplete" />
+          <ScalarProperty Name="Mark" ColumnName="Mark" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="RememberTime" ColumnName="RememberTime" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="userID" ColumnName="userID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="DatabaseModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="login" ColumnName="login" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="regdata" ColumnName="regdata" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="remberMe" ColumnName="remberMe" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Files">
+      <EntityTypeMapping TypeName="DatabaseModel.File">
+        <MappingFragment StoreEntitySet="Files">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="itemid" ColumnName="itemid" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="file1" ColumnName="file" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="DatabaseModel.Comment">
+        <MappingFragment StoreEntitySet="Comment">
+          <ScalarProperty Name="itemid" ColumnName="itemid" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

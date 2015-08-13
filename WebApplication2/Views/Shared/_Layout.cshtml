@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html style="height:100%; width:100%; color: #0a2bc8;">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DaySet</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/simple-sidebar.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/ToDoClass.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.datetimepicker.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css">
+    <script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/sessvars.js"></script>
+    <script type="text/javascript" src="~/Scripts/moment.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="~/Scripts/ajaxrequest.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    <link href="~/Content/jquery.fileupload.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.ui.widget.js"></script>
+    <script src="~/Scripts/jquery.fileupload.js"></script>
+
+    <script>
+    function changeTextLink() {
+        var txt = $("#btnShow").text();
+        if (txt == "Показать завершенные задачи") {
+            $("#btnShow").text("Скрыть завершенные задачи");
+            $('#endtasks').val('true');
+        }
+        else {
+            $("#btnShow").text("Показать завершенные задачи");
+            $('#endtasks').val('false');
+        }
+    }
+    </script>
+
+<script>
+    $(document).ready(function(){
+       
+        var check = @Session["showTask"];
+        if(check)
+        {
+            $("#btnShow").text("Скрыть завершенные задачи");
+            $('#endtasks').val('true');
+        } else
+        {
+            $("#btnShow").text("Показать завершенные задачи");
+            $('#endtasks').val('false');
+        }
+    })
+</script>
+   
+</head>
+<body>
+    <div id="container" class="mainbox">
+        @*<div id="fields">*@
+            <div id="nav">
+                <div id="toolbar">
+                    @RenderBody()
+                </div>
+                <div id="boxes">
+                </div>
+            </div>
+            <div id="itemList">
+                <div id="inputWrapper">
+                    @{ Html.RenderAction("Item"); }
+                </div>
+                <div id="scrollList">
+                    <div id="list">
+                        <ul class="list-unstyled" id="unfinisheditem">
+                            @{ Html.RenderAction("ActiveItemList"); }
+                        </ul>
+                    </div>
+                    <div class="endTaskButton">
+                        @Ajax.ActionLink("Показать завершенные задачи", "ShowTask", null, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "endlist", OnSuccess = "changeTextLink()" }, new { @id = "btnShow", @style = "color:#fff; text-decoration: none;" })
+                    </div>
+
+                    <div id="endlist">
+                        @{ Html.RenderAction("EndItemList"); }
+                    </div>
+                </div>
+            </div>
+            <div id="detail">
+            </div>
+        @*</div>*@
+    </div>
+    <div style="display:none;">
+        <input id="endtasks" value="@Session["showTask"]">
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+﻿@model WebApplication2.Models.Comment
+
+@if (Model != null)
+{
+    <div id="comment_@Model.Id" class="comment-block" style="display:inline-block;">
+        <div class="comment-text">
+            <label>@Model.username :</label>
+            <text>@Model.text</text>
+        </div>
+        <div class="comment-time">
+            @Model.time
+        </div>
+        <div class="comment-delete">
+            <a class="deletecomment" id="commentdelete_@Model.Id"><img class="delete-icon" src="~/Content/Icons/icon_delete.png" /></a>
+        </div>
+    </div>
+}

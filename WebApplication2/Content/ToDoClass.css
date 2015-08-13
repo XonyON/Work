@@ -1,0 +1,747 @@
+﻿.mainbox{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-size: 100% 100%;
+    background-repeat:no-repeat;
+    background-image: url(Images/141700.jpg);
+    /*overflow-y:scroll;
+    overflow-x:hidden;*/
+    min-width:320px;
+}
+
+:-moz-placeholder           { color: #b61313; text-overflow:ellipsis;}
+::-moz-placeholder          { color: #b61313; text-overflow:ellipsis;}
+::-webkit-input-placeholder { color: #b61313; text-overflow:ellipsis;}
+:-ms-input-placeholder      { color: #b61313; text-overflow:ellipsis;}
+
+#login{
+    max-width:100%;
+    min-width:260px;
+    padding:5px 5px 5px 5px;
+}
+
+#username{
+    display:inline-block;
+    font:bold 14px arial;
+    background: #eba23d;
+    opacity:0.8;
+    padding: 5px 5px 5px 5px;
+    border:1px double black;
+    width:32%;
+    margin-left:5px;
+}
+
+#logout{
+    display:inline-block;
+    font:bold 14px arial;
+    background: #fff;
+    opacity:0.9;
+    padding: 5px 1px 5px 8px;
+    border-radius:5px;
+    border:1px double black;
+    width:29%;
+}
+
+#logout a{
+    color:blue;
+}
+
+#avatar{
+    display:inline-block;
+    float:left;
+}
+
+#nav {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: inline-block;
+    height:100%;
+    float: left;
+    width: 250px;
+    background: rgba(55,55,55,0.22);
+}
+#itemList {
+    display: inline-block;
+    height:100%;
+    width:68%;
+    max-width:68%;
+    transition:all 0.3s ease;
+    margin: 5px 1% 0px 1%;
+    /*overflow-y:auto;
+    overflow-x:hidden;*/
+
+}
+
+#itemList #scrollList{
+    overflow-y:auto;
+    overflow-x:hidden;
+    margin-top:5px;
+    padding-bottom:45px;
+    height:95%;
+}
+
+#detail {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    border-radius: 13px 13px 13px 13px;
+    padding-bottom:50px;
+    border:1px outset silver;
+    display: inline-block;
+    height: 95%;
+    float: left;
+    /*width: 25%;*/
+    /*min-width:290px;*/
+    width:290px;
+    overflow:hidden;
+    box-sizing:border-box;
+    margin-right: -290px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-touch-action: none;
+}
+
+    #detail #top {
+        font: bold 14px arial;
+        border-radius: inherit;
+        overflow:hidden;
+        height: 35px;
+        width: 100%;
+        top:0;
+        left:0;
+        right:0;
+        padding: 8px 20px 8px 10px;
+        min-width: 150px;
+        max-width: 100%;
+    }
+
+    #top .task_text {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #detail #middle {
+        border-top:1px inset silver;
+        border-bottom:1px inset silver;
+        overflow:auto;
+        height:78%;
+        background: rgb(238, 238, 238);
+        margin-bottom:90px;
+    }
+
+    #detail #bottom {
+        position: absolute;
+        background: #fff;
+        border-radius: inherit;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: 1px inset silver;
+        height: 80px;
+        width: 100%;
+        bottom:0;
+        left:0;
+        /*right:0;*/
+    }
+
+     #bottom label{
+        float:left; 
+        margin:13px 5px 5px 15px; 
+        font:10px arial; 
+        max-width:200px;
+     }
+  
+
+#middle .innerdiv  {
+        font: bold 16px arial;
+        margin: 2% 2% 2% 2%;
+        width: 93%;
+        min-width:255px;
+        min-height:30px;
+        background: #ffffff;
+        border-radius: 20px;
+        border:1px double gray;
+        padding: 5px 7px 7px 10px;
+    }
+
+#middle .time-picker {
+    color:#c0392b;
+    height: 26px;
+    text-overflow:ellipsis;
+}
+
+    
+#middle .btnTimePicker{
+         background:url(/Content/Icons/Calendar-Time-24x24B.png) no-repeat;
+    }
+
+
+
+#middle input[type="text"] {
+    box-sizing: border-box;
+    color: black;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-left: 1%;
+    width: 62%;
+    padding: 3px 7px;
+    font-size: 14px;
+}
+
+#btnShow{
+    min-width:220px;
+}
+
+#taskinput{
+    border: none;
+    background: none;
+}
+
+.finish{
+
+    background: url(/Content/Icons/checkbox_checked.png) no-repeat;
+    background-size:cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+.unfinish{
+    background: url(/Content/Icons/checkbox_unchecked.png) no-repeat;
+    background-size:cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+.mark{
+    background: url(/Content/Icons/fav2.png) no-repeat;
+    background-size:cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+.unmark{
+    background: url(/Content/Icons/fav1.png) no-repeat;
+    background-size:cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+.ToDoItem{
+
+    text-align: justify;
+    font: bold 14px arial;
+    height: 33px;
+    border-radius: 10px 10px;
+    background-color: #ffffff;
+    padding: 7px 13px 3px 15px;
+    border: 1px solid black;
+    margin: 3px 1% 3px 1%;
+}
+
+    .ToDoItem div {
+        display: inline-block;
+    }
+
+    .ToDoItem  .time{
+        float:right;
+        font: italic 10px arial;
+        margin-right: 4%;
+    }
+
+    .ToDoItem .item_text{
+        width: 100%; 
+        margin-left: 3%;
+    }
+
+#beginform {
+    overflow: hidden;
+    position: relative;
+    margin: 0px 1% 2% 1%;
+    padding: 7px 15px 2px 15px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.32);
+    -webkit-box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.25);
+    box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.25);
+    color: #f7f7f7;
+    font: bold 14px arial;
+}
+    #beginform #priority {
+        display: none;
+    }
+
+
+    #beginform input[type=checkbox] + label {
+        background: url(/Content/Icons/fav1.png) 0px 0px no-repeat;
+        height: 24px;
+        width: 24px;
+        float: right;
+        display: inline-block;
+        padding: 0 0 0 0px;
+        cursor:pointer;
+    }
+
+    #beginform input[type=checkbox]:checked + label {
+        background: url(/Content/Icons/fav2.png)  0px 0px no-repeat;
+        height: 24px;
+        width: 24px;
+        float: right;
+        display: inline-block;
+        padding: 0 0 0 0px;
+         cursor:pointer;
+    }
+
+    #beginform input {
+        display: inline;
+    }
+
+    #datetimepicker{
+        max-width: 80px;
+        min-width: 60px;
+    }
+
+.inputdate {
+    height:22px; 
+    background:none; 
+    border:none;
+}
+
+#btnShow {
+    margin-left: 1%;
+    border-radius: 10px;
+    background-color: rgba(1, 1, 1, 0.76);
+    padding: 2px 7px 2px 7px;
+}
+
+.endTaskButton {
+    margin: 1% 0px 1% 0px;
+}
+
+.btnTimePicker {
+    background:url(/Content/Icons/Calendar-Time-24x24W.png) no-repeat;
+    cursor:pointer;
+    width: 24px;
+    height: 24px;
+    border: none;
+    float: right;
+    margin-right: 3%;
+
+}
+
+.btnRemoveTime {
+    background:url(/Content/Icons/delete_time.png) no-repeat;
+    cursor:pointer;
+    width: 24px;
+    height: 24px;
+    border: none;
+    float: right;
+    visibility:hidden;
+}
+
+#taskinput {
+    width:100%; 
+    max-width:60%;
+    min-width:150px;
+    float: left; 
+    padding-left:3%;
+}
+
+.time-picker {
+    float: right;
+    background: none;
+    border: none;
+    text-align: right;
+    visibility:hidden;
+}
+
+#endlist item_text {
+   text-decoration: line-through;
+}
+
+#endlist ul {
+   opacity: 0.6;
+}
+
+#note {
+    background: url(../Content/Images/note_tex_128x42.png) repeat;
+    border: 1px double silver;
+    border-radius:2px;
+    min-width:255px;
+    max-width:96%;
+    overflow: hidden;
+    resize: none;
+    padding: 5px 5px 5px 5px;
+    margin:5px 5px 5px 5px;
+    font:16px italic;
+    width: 100%;
+    display:block;
+}
+
+.files-add {
+        font: bold 16px arial;
+        margin: 2% 2% 2% 2%;
+        width: 93%;
+        background: rgb(235, 235, 235);
+        border-radius: 20px;
+        border:2px dotted black;
+        padding: 4px 7px 7px 15px;
+}
+
+.files-add:hover {
+    background: #f7f7f7;
+}
+
+.files-add label {
+    text-align:center;
+}
+
+.item_text {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#finisheditem .ToDoItem .item_text{
+    text-decoration:line-through;
+}
+
+.files-add input[type="file"]{
+    position:absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.file_name {
+    width: 94%;
+    margin: 2px 3% 2px 3%;
+}
+
+.file_type {
+    width: 94%;
+    margin: 2px 3% 2px 3%;
+}
+
+.file_size {
+    width: 94%;
+    margin: 2px 3% 2px 3%;
+}
+
+.progress {
+    width:93%;
+    margin: 2% 2% 2% 2%;
+}
+
+.item-file {
+    width: 94%;
+    margin:2% 2% 2% 2%;
+    background: #e1dbdb;
+    border: 2px outset black;
+    border-radius: 10px;
+}
+
+    .item-file .file-delete {
+        display:inline;
+        float: right;
+        margin-right: 5px;
+        width: 16px;
+    }
+
+.icontime {
+    border: 1px outset;
+    border-radius: 8px;
+    padding: 3px 3px 3px 3px;
+    height: auto;
+    width: auto;
+    max-width: 30px;
+    max-height: 30px;
+    display: inline;
+}
+
+.innerdiv #addtask[type='text']{
+    width: 95%;
+    height: 30px;
+    font-size: 18px;
+    margin-bottom:5px;
+    margin-top:5px; 
+    min-width:220px;
+    max-width:100%;
+}
+
+.inertask {
+    float:left;
+    margin: 5px 6px;
+}
+
+.li-task {
+    display:inline-block;
+    width: 95%;
+    background-color: whitesmoke;
+    padding: 2px 10px 2px 5px;
+    margin: 2px 10px 2px 4px;
+    border-radius: 5px;
+    border:groove;
+}
+
+.iner-label{
+    margin: 5px 5px 5px 10px;
+    float: left;
+}
+
+.iner-delete{
+    float: right;
+    margin: 1px 0px 0px 5px;
+    border: none;
+    background:url(../Content/Icons/delete-iner-24.png);
+    width:24px;
+    height:24px;
+}
+
+.splitter{
+    height:25px;
+    border-right:groove;
+}
+
+.comments-input{
+    position:relative;
+    min-width:150px;
+    max-width:96%;
+    top:0;
+    left:0;
+    width:100%;
+    padding: 4px 10px 5px 10px;
+}
+
+    .comment-block{
+        display:inline-block;
+        margin: 2% 2% 2% 2%;
+        width: 94%;
+        border:1px outset silver;
+        border-radius:5px; 
+        background:rgba(224, 213, 180, 0.85);
+        min-width: 255px;
+        max-width: 96%;
+    }
+
+    .comment-block label{
+        display:inline;
+        top:0;
+        font:bold 14px arial;
+    }
+
+    .comment-block textarea{
+        display:inline;
+        font: 14px comic;
+        resize:none;
+    }
+
+    .comment-time{
+        display:inline;
+        position:relative; 
+        bottom:0px; 
+        left:6px; 
+        font:12px black;
+    }
+
+    .comment-delete{
+        display:inline;
+        cursor:pointer;
+        float: right;
+        margin: 0px 5px 5px 5px;
+    }
+
+    .comment-text{
+        padding:5px 10px 5px 10px;
+    }
+
+.comments-input #comment {
+    width:90%;
+    margin: 4px 10px 5px 10px;
+    min-width:150px;
+    max-width:96%;
+}
+
+#bottom-panel{
+    display:block;
+    position:relative;
+    bottom:0;
+    width:100%;
+    height:50px;
+    float:left;
+    padding:3px 10px 3px 10px;
+}
+
+#delete_item{
+    float:right;
+    cursor:pointer;
+    margin:0px 20px 5px 0px;
+}
+
+#close{
+    float:left;
+    cursor:pointer;
+    margin:4px 0px 5px 10px;
+}
+
+@media (min-width:1100px){
+     #itemList {
+        width:75%;
+        max-width:75%;
+     }
+}
+
+@media (max-width:900px) {
+    #nav{
+         position:static;
+         top: 0;
+         right: 0;
+         left: 0;
+         display: inline-block;
+         height:41px; 
+         width: 100%;
+    }
+
+    #itemList {
+        padding-bottom:40px;
+        width:98%;
+        max-width:98%;
+    }
+
+    #itemList #scrollList {
+        margin-top: 39px;
+        padding-bottom: 27px;
+    }
+
+    #detail {
+        position: absolute;
+        right: 0;
+        top:85px;
+        margin-right:-292px;
+        height:80%;
+        padding-bottom:60px;
+    }
+
+    #detail #bottom{
+    }
+
+    #beginform{
+        overflow: hidden;
+        position: absolute;
+        margin: 0px 1% 2% 0;
+        width:98%;
+        padding: 3px 5px 2px 5px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background: rgba(0,0,0,0.32);
+        -webkit-box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.25);
+        box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.25);
+        color: #f7f7f7;
+        font: bold 14px arial;
+    }
+}
+
+@media (max-width:640px) {
+        #detail {
+        padding-bottom:85px;
+        height:70%;
+    }
+}
+
+@media (max-width:480px) {
+
+    #detail {
+            min-width:460px;
+            position: absolute;
+            right: 0;
+            top:0;
+            margin-right:-475px;
+            height:100%;
+            padding-bottom:70px;
+        }
+}
+
+@media (max-width:360px) {
+        #itemList {
+        width:93%;
+        max-width:93%;
+        margin-bottom:1px;
+        margin-top:2px;
+       }
+
+        #itemList #scrollList{
+                margin-top:50px;
+                padding-bottom:33px;
+        }
+
+        #beginform{
+            margin:5px 5px 5px 0px;
+            width:93%;
+        }
+
+       #beginform input {
+            max-width: 50%;
+
+        }
+
+       #beginform #datetimepicker{
+            max-width: 80px;
+            min-width: 40px;
+        }
+
+       #detail {
+            min-width:360px;
+            right: 0;
+            top:1px;
+            margin-right:-360px;
+            height:99%;
+            padding-bottom:85px;
+        }
+
+       #detail #bottom {
+            height: 70px;
+            bottom:0;
+            left:0;
+            /*right:0;*/
+    }
+       #bottom #delete_item{
+           width:16px;
+           height:16px;
+       }
+
+       #bottom #close{
+           width:16px;
+           height:16px;
+       }
+
+       #bottom label{
+           margin-top:10px;
+       }
+}
+
+@media (max-width:320px) {
+    #detail {
+            min-width:320px;
+            margin-right:-322px;
+        }
+
+    #itemList #scrollList{
+                margin-top:50px;
+                padding-bottom:27px;
+        }
+}

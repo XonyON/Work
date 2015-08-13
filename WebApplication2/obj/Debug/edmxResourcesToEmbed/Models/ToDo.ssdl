@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AddTask">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="text" Type="nvarchar(max)" />
+    <Property Name="isComplete" Type="bit" />
+    <Property Name="itemID" Type="int" />
+  </EntityType>
+  <EntityType Name="ToDoItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Task" Type="nvarchar(max)" />
+    <Property Name="isComplete" Type="bit" />
+    <Property Name="Mark" Type="bit" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="RememberTime" Type="datetime" />
+    <Property Name="Note" Type="nvarchar(max)" />
+    <Property Name="File" Type="varbinary(max)" />
+    <Property Name="Comment" Type="nvarchar(max)" />
+    <Property Name="userID" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="login" Type="nvarchar" MaxLength="50" />
+    <Property Name="password" Type="nvarchar(max)" />
+    <Property Name="regdata" Type="datetime" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="DatabaseModelStoreContainer">
+    <EntitySet Name="AddTask" EntityType="Self.AddTask" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ToDoItem" EntityType="Self.ToDoItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

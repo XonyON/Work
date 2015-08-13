@@ -1,0 +1,68 @@
+﻿<link rel="stylesheet" type="text/css" href="~/Content/jquery.datetimepicker.css" />
+
+<script>
+    jQuery($(document).ready(function () {
+        $('#datetimepicker').datetimepicker({
+            lang: 'ru',
+            i18n: {
+                de: {
+                    months: [
+                     'Januar', 'Februar', 'März', 'April',
+                     'Mai', 'Juni', 'Juli', 'August',
+                     'September', 'Oktober', 'November', 'Dezember',
+                    ],
+                    dayOfWeek: [
+                     "So.", "Mo", "Di", "Mi",
+                     "Do", "Fr", "Sa.",
+                    ]
+                }
+            },
+            closeOnWithoutClick :true,
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+        $('#btnDatePicker').click(function () {
+            $('#datetimepicker').datetimepicker('show');
+            $('#btnRemDate').css('visibility', 'visible');
+            $('#datetimepicker').css('visibility', 'visible');
+        })
+        $('#btnRemDate').click(function () {
+            $('#datetimepicker').val('');
+            $('#btnRemDate').css('visibility', 'hidden');
+            $('#datetimepicker').css('visibility', 'hidden');
+        })
+    }))
+</script>
+
+<script type="text/javascript">
+    function success(data) {
+        $('#list').html(data);
+        $('#taskinput').val('');
+        $('#datetimepicker').val('');
+        $('#btnRemDate').css('visibility', 'hidden');
+        $('#datetimepicker').css('visibility', 'hidden');
+        $('#priority').prop('checked', false);
+    }
+</script>
+
+<div id="beginform">
+
+    @using (Ajax.BeginForm("AddItem", new AjaxOptions
+                                          {
+                                              Url = @Url.Action("AddItem"),
+                                              HttpMethod = "POST",
+                                              OnSuccess = "success",
+                                              
+                                          }))
+    {
+
+        <input type="text" id="taskinput" name="Task"  maxlength="255" placeholder="Добавить задачу..." style="width:100%; box-sizing:border-box; height: 23px;"/>
+        <input type="checkbox" id="priority" value="true" name="priority"/><label for="priority"></label>
+        <input type="hidden" value="false" name="priority" style="display:none;" />
+        <input id="btnDatePicker" class="btnTimePicker" type="button" />
+        <input id="btnRemDate" class="btnRemoveTime" type="button" />
+        <input id="datetimepicker" class="time-picker" type="text" name="date" readonly>
+
+        <input type="submit" id="submitTask" style="display: none; width:0px;" />
+    }
+</div>

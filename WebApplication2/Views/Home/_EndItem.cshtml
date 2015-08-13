@@ -1,0 +1,8 @@
+﻿@model IEnumerable<WebApplication2.Models.ToDoItem>
+
+<ul class="list-unstyled" id="finisheditem">
+    @if (Model != null && bool.Parse(Session["showTask"] as string))
+    {
+        @Html.Partial("_Item");
+    }
+</ul>
