@@ -315,11 +315,17 @@
             if($(this).hasClass('mark'))
             {
                 $(this).removeClass('mark');
+                $('#mrk_'+id).removeClass('mark');
                 $(this).addClass('unmark');
+                $('#mrk_'+id).addClass('unmark');
             } else
             {
+                console.log($(this).hasClass('mark'));
+
                 $(this).removeClass('unmark');
+                $('#mrk_'+id).removeClass('unmark');
                 $(this).addClass('mark');
+                $('#mrk_'+id).addClass('mark');
             }
 
         })
